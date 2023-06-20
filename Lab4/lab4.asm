@@ -1,0 +1,203 @@
+ORG 0H
+MOV TMOD,#21H  
+MOV TH1,#0FDH	
+MOV SCON,#50H   
+SETB TR1	
+////////////////////INPUT////////////////////
+INPUT:
+MOV R3,#-1
+MOV R4,#"-1"
+MOV R5,#-1
+/////////////////////MAIN//////////////////////////////////////
+MAIN:
+MOV R1,#"-1"
+MOV P1,#0FFH
+CALL KEY_PRESS
+CJNE R1,#"-1",LOOP
+JMP MAIN
+LOOP:
+CJNE R3,#-1,OP
+NUM_1:
+MOV A,R2
+MOV R3,A
+JMP DISPLAY
+OP:
+CJNE R4,#"-1",NUM_2
+MOV A,R1
+MOV R4,A
+JMP DISPLAY
+NUM_2:
+CJNE R5,#-1,DISPLAY
+MOV A,R2
+MOV R5,A
+JMP DISPLAY
+DISPLAY:
+MOV SBUF,R1
+CALL HIENTHI
+CALL DELAY
+JMP MAIN
+/////////////////////QUET PHIM///////////////////////////
+KEY_PRESS:
+MOV P1,#0EFH
+MOV A,P1
+ANL A,#0EFH
+CJNE A,#0EFH,COL1
+MOV P1,#0DFH
+MOV A,P1
+ANL A,#0DFH
+CJNE A,#0DFH,COL2
+MOV P1,#0BFH
+MOV A,P1
+ANL A,#0BFH
+CJNE A,#0BFH,COL3
+MOV P1,#7FH
+MOV A,P1
+ANL A,#7FH
+CJNE A,#7FH,COL4
+RET
+///////////////////////////////COL1////////////////////////////
+COL1:
+JNB P1.0,SO_7
+JNB P1.1,SO_4
+JNB P1.2,SO_1
+JNB P1.3,CLEAR
+SO_7:
+MOV R1,#"7"
+MOV R2,#7
+JMP LOOP
+SO_4:
+MOV R1,#"4"
+MOV R2,#4
+JMP LOOP
+SO_1:
+MOV R1,#"1"
+MOV R2,#1
+JMP LOOP
+CLEAR:
+MOV SBUF,#254
+CALL HIENTHI
+MOV SBUF,#1
+CALL HIENTHI
+JMP INPUT
+RET
+/////////////////////COL2///////////////////////////////////
+COL2:
+JNB P1.0,SO_8
+JNB P1.1,SO_5
+JNB P1.2,SO_2
+JNB P1.3,SO_0
+SO_8:
+MOV R1,#"8"
+MOV R2,#8
+JMP LOOP
+SO_5:
+MOV R1,#"5"
+MOV R2,#5
+JMP LOOP
+SO_2:
+MOV R1,#"2"
+MOV R2,#2
+JMP LOOP
+SO_0:
+MOV R1,#"0"
+MOV R2,#0
+JMP LOOP
+RET
+//////////////////////////////COL3////////////////////////////////
+COL3:
+JNB P1.0,SO_9
+JNB P1.1,SO_6
+JNB P1.2,SO_3
+JNB P1.3,EQUAL
+SO_9:
+MOV R1,#"9"
+MOV R2,#9
+JMP LOOP
+SO_6:
+MOV R1,#"6"
+MOV R2,#6
+JMP LOOP
+SO_3:
+MOV R1,#"3"
+MOV R2,#3
+JMP LOOP
+EQUAL:
+MOV R1,#"="
+MOV SBUF,R1
+CALL HIENTHI
+CALL DELAY
+CALL OUT
+RET
+///////////////////////COL4///////////////////////////////////////
+COL4:
+JNB P1.0,CHIA
+JNB P1.1,NHAN
+JNB P1.2,TRU
+JNB P1.3,CONG
+CHIA:
+MOV R1,#"/"
+JMP LOOP
+NHAN:
+MOV R1,#"x"
+JMP LOOP
+TRU:
+MOV R1,#"-"
+JMP LOOP
+CONG:
+MOV R1,#"+"
+JMP LOOP
+RET
+////////////////////TINH KET QUA//////////////////////
+OUT:
+MOV A,R3
+CJNE R4,#"+",TRU_1
+CONG_1:
+ADD A,R5
+JMP DIS
+TRU_1:
+CJNE R4,#"-",NHAN_1
+CLR C
+SUBB A,R5
+JMP DIS
+NHAN_1:
+CJNE R4,#"x",CHIA_1
+MOV B,R5
+MUL AB
+JMP DIS
+CHIA_1:
+MOV B,R5
+DIV AB
+JMP DIS
+DIS:
+MOV B,#10
+DIV AB
+ADD A,#30H
+MOV R6,A
+MOV A,B
+ADD A,#30H
+MOV R7,A
+MOV SBUF,R6
+CALL HIENTHI
+MOV SBUF,R7
+CALL HIENTHI
+JMP MAIN
+RET
+/////////////////////HIENTHI//////////////////////////
+HIENTHI:
+JNB TI,$		
+CLR TI			
+RET
+////////////////////////DELAY//////////////////////////////
+DELAY:
+MOV R1,#5
+DELAY1:
+MOV TH0,#HIGH(-50000)
+MOV TL0,#LOW(-50000)
+SETB TR0
+JNB TF0,$
+CLR TF0
+CLR TR0
+DJNZ R1,DELAY1
+RET
+////////////////////END////////////////////////////////////
+END

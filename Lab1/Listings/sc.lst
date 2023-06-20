@@ -1,0 +1,180 @@
+A51 MACRO ASSEMBLER  SC                                                                   03/23/2023 21:25:00 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\sc.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE sc.asm SET(SMALL) DEBUG PRINT(.\Listings\sc.lst) OBJECT(.\Objects\sc.ob
+                      j) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0H
+                       2             
+0000                   3     MAIN:
+0000 1123              4             CALL E2
+                       5     ;;EFFECT1: DEN SANG ROI TAT LAN LUOT 
+0002                   6             EFFECT1:
+0002 1132              7                     CALL E3
+                       8     ;;EFFECT2: DEN SANG CHAN LE
+0004 7A23              9             MOV R2,#35
+0006                  10             EFFECT2:
+0006 1186             11                     CALL E5
+0008 DAFC             12                     DJNZ R2,EFFECT2
+                      13     ;;EFFECT3: DEN SANG TAT LIEN TUC
+000A 7B19             14             MOV R3,#25D
+000C                  15             EFFECT3:
+000C 1114             16                     CALL E1
+000E 1123             17                     CALL E2
+0010 DBFA             18                     DJNZ R3,EFFECT3
+0012 80EC             19             SJMP MAIN
+                      20     ;;E1 : TAT CA DEN SANG
+0014                  21     E1:
+0014 758000           22             MOV P0,#00H
+0017 759000           23             MOV P1,#00H
+001A 75A000           24             MOV P2,#00H
+001D 75B000           25             MOV P3,#00H
+0020 11A3             26             CALL DELAY100MS
+0022 22               27     RET
+                      28     ;;E2 : TAT CA DEN TAT
+0023                  29     E2:
+0023 7580FF           30             MOV P0,#0FFH
+0026 7590FF           31             MOV P1,#0FFH
+0029 75A0FF           32             MOV P2,#0FFH
+002C 75B0FF           33             MOV P3,#0FFH
+002F 11A3             34             CALL DELAY100MS
+0031 22               35     RET
+                      36     
+                      37     ;;E3: LED SANG DAN
+0032                  38     E3:
+0032 74FF             39             MOV A,#0FFH
+0034 C3               40             CLR C
+0035                  41     E3_P0:
+0035 33               42             RLC A
+0036 F580             43             MOV P0,A
+0038 11A3             44             CALL DELAY100MS
+003A B400F8           45             CJNE A,#00H,E3_P0
+003D 74FF             46             MOV A,#0FFH
+003F                  47     E3_P1:
+003F 33               48             RLC A
+0040 F590             49             MOV P1,A
+0042 11A3             50             CALL DELAY100MS
+0044 B400F8           51             CJNE A,#00H,E3_P1
+0047 74FF             52             MOV A,#0FFH
+0049                  53     E3_P2:
+0049 33               54             RLC A
+004A F5A0             55             MOV P2,A
+004C 11A3             56             CALL DELAY100MS
+004E B400F8           57             CJNE A,#00H,E3_P2
+A51 MACRO ASSEMBLER  SC                                                                   03/23/2023 21:25:00 PAGE     2
+
+0051 74FF             58             MOV A,#0FFH
+0053                  59     E3_P3:
+0053 33               60             RLC A
+0054 F5B0             61             MOV P3,A
+0056 11A3             62             CALL DELAY100MS
+0058 B400F8           63             CJNE A,#00H,E3_P3
+                      64     
+                      65     
+                      66     ;;E4: LED TAT DAN
+005B                  67     E4:
+005B                  68     E4_P0:
+005B D3               69             SETB C
+005C 33               70             RLC A
+005D F580             71             MOV P0,A
+005F 11A3             72             CALL DELAY100MS
+0061 B4FFF7           73             CJNE A,#0FFH,E4_P0
+0064 7400             74             MOV A,#00H
+0066                  75     E4_P1:
+0066 D3               76             SETB C
+0067 33               77             RLC A
+0068 F590             78             MOV P1,A
+006A 11A3             79             CALL DELAY100MS
+006C B4FFF7           80             CJNE A,#0FFH,E4_P1
+006F 7400             81             MOV A,#00H
+0071                  82     E4_P2:
+0071 D3               83             SETB C
+0072 33               84             RLC A
+0073 F5A0             85             MOV P2,A
+0075 11A3             86             CALL DELAY100MS
+0077 B4FFF7           87             CJNE A,#0FFH,E4_P2
+007A 7400             88             MOV A,#00H
+007C                  89     E4_P3:
+007C D3               90             SETB C
+007D 33               91             RLC A
+007E F5B0             92             MOV P3,A
+0080 11A3             93             CALL DELAY100MS
+0082 B4FFF7           94             CJNE A,#0FFH,E4_P3
+0085 22               95     RET
+                      96             
+                      97     ;;E5: DEN SANG CHAN LE
+0086                  98     E5:
+0086 758055           99             MOV P0,#01010101B
+0089 759055          100             MOV P1,#01010101B
+008C 75A055          101             MOV P2,#01010101B
+008F 75B055          102             MOV P3,#01010101B
+0092 11A3            103             CALL DELAY100MS
+0094 7580AA          104             MOV P0,#10101010B
+0097 7590AA          105             MOV P1,#10101010B
+009A 75A0AA          106             MOV P2,#10101010B
+009D 75B0AA          107             MOV P3,#10101010B
+00A0 11A3            108             CALL DELAY100MS
+00A2 22              109     RET
+                     110     ;;Ham delay
+                     111     
+00A3                 112     DELAY100MS:
+00A3 7D02            113             MOV R5,#2D
+00A5                 114             DELAY:
+00A5 758901          115                     MOV TMOD,#01H
+00A8 758C3C          116                     MOV TH0,#HIGH(-50000D)
+00AB 758AB0          117                     MOV TL0,#LOW(-50000D)
+00AE D28C            118                     SETB TR0
+00B0 308DFD          119                     JNB TF0,$
+00B3 C28D            120                     CLR TF0
+00B5 DDEE            121                     DJNZ R5,DELAY
+00B7 22              122     RET
+                     123     END
+A51 MACRO ASSEMBLER  SC                                                                   03/23/2023 21:25:00 PAGE     3
+
+                                     
+A51 MACRO ASSEMBLER  SC                                                                   03/23/2023 21:25:00 PAGE     4
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   00A5H   A   
+DELAY100MS . . . .  C ADDR   00A3H   A   
+E1 . . . . . . . .  C ADDR   0014H   A   
+E2 . . . . . . . .  C ADDR   0023H   A   
+E3 . . . . . . . .  C ADDR   0032H   A   
+E3_P0. . . . . . .  C ADDR   0035H   A   
+E3_P1. . . . . . .  C ADDR   003FH   A   
+E3_P2. . . . . . .  C ADDR   0049H   A   
+E3_P3. . . . . . .  C ADDR   0053H   A   
+E4 . . . . . . . .  C ADDR   005BH   A   
+E4_P0. . . . . . .  C ADDR   005BH   A   
+E4_P1. . . . . . .  C ADDR   0066H   A   
+E4_P2. . . . . . .  C ADDR   0071H   A   
+E4_P3. . . . . . .  C ADDR   007CH   A   
+E5 . . . . . . . .  C ADDR   0086H   A   
+EFFECT1. . . . . .  C ADDR   0002H   A   
+EFFECT2. . . . . .  C ADDR   0006H   A   
+EFFECT3. . . . . .  C ADDR   000CH   A   
+MAIN . . . . . . .  C ADDR   0000H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

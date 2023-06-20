@@ -1,0 +1,140 @@
+A51 MACRO ASSEMBLER  LAB3                                                                 04/30/2023 09:23:41 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\Lab3.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Lab3.asm SET(SMALL) DEBUG PRINT(.\Listings\Lab3.lst) OBJECT(.\Objects\L
+                      ab3.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H
+0000 020030            2     LJMP MAIN
+                       3     
+0003                   4     ORG 0003H
+0003 020093            5     LJMP PAUSE
+                       6     
+0013                   7     ORG 0013H
+0013 020099            8     LJMP RESET
+                       9     
+0030                  10     ORG 0030H
+0030                  11     MAIN:
+0030 D2B0             12     SETB P3.0
+0032 7900             13     MOV R1,#0; GIAY
+0034 7A00             14     MOV R2,#0; %GIAY
+0036 75A885           15     MOV IE,#85H
+0039 C288             16     CLR IT0
+003B 113F             17     CALL CLOCK
+003D 80F1             18     JMP MAIN
+                      19     
+003F                  20     CLOCK:   
+003F 208009           21     JB P0.0,DEC_1
+0042 3080FD           22     JNB P0.0,$
+0045 09               23     INC R1
+0046 B96402           24     CJNE R1,#100,DEC_1
+0049 7900             25     MOV R1,#0
+                      26     
+004B                  27     DEC_1:
+004B 208109           28     JB P0.1,CLOCK_1
+004E 3081FD           29     JNB P0.1,$
+0051 19               30     DEC R1
+0052 B9FF02           31     CJNE R1,#-1,CLOCK_1
+0055 7963             32     MOV R1,#99
+                      33     
+0057                  34     CLOCK_1:
+0057 116A             35     CALL HIENTHI
+0059 30B0E3           36     JNB P3.0,CLOCK
+005C 0A               37     INC R2
+005D BA64DF           38     CJNE R2,#100,CLOCK
+0060 09               39     INC R1
+0061 7A00             40     MOV R2,#0
+0063 B964D9           41     CJNE R1,#100,CLOCK
+0066 7900             42     MOV R1,#0
+0068 80D5             43     JMP CLOCK
+                      44     
+006A                  45     HIENTHI:
+006A E9               46     MOV A,R1
+006B 75F00A           47     MOV B,#10
+006E 84               48     DIV AB
+006F 759001           49     MOV P1,#01H
+0072 F5A0             50     MOV P2,A
+0074 119E             51     CALL DELAY
+0076 759002           52     MOV P1,#02H
+0079 85F0A0           53     MOV P2,B
+007C 119E             54     CALL DELAY
+007E EA               55     MOV A,R2
+007F 75F00A           56     MOV B,#10
+0082 84               57     DIV AB
+A51 MACRO ASSEMBLER  LAB3                                                                 04/30/2023 09:23:41 PAGE     2
+
+0083 759004           58     MOV P1,#04H
+0086 F5A0             59     MOV P2,A
+0088 119E             60     CALL DELAY
+008A 759008           61     MOV P1,#08H
+008D 85F0A0           62     MOV P2,B
+0090 119E             63     CALL DELAY
+0092 22               64     RET
+                      65     
+0093                  66     PAUSE:
+0093 30B2FD           67     JNB P3.2,$ 
+0096 B2B0             68     CPL P3.0
+0098 32               69     RETI
+                      70     
+0099                  71     RESET:
+0099 7900             72     MOV R1,#0; GIAY
+009B 7A00             73     MOV R2,#0; %GIAY
+009D 32               74     RETI
+                      75     
+                      76     ;DELAY:
+                      77     ;MOV R6,#245
+                      78     ;MOV R7,#5
+                      79     ;LOOP1: DJNZ R6,$
+                      80     ;LOOP2: DJNZ R7,LOOP1
+                      81     ;RET
+                      82     
+009E                  83     DELAY:
+009E 758901           84     MOV TMOD,#01H
+00A1 758CF6           85     MOV TH0,#HIGH(-2500)
+00A4 758A3C           86     MOV TL0,#LOW(-2500)
+00A7 D28C             87     SETB TR0
+00A9 308DFD           88     JNB TF0,$
+00AC C28D             89     CLR TF0
+00AE C28C             90     CLR TR0
+00B0 22               91     RET
+                      92     
+                      93     END
+                             
+A51 MACRO ASSEMBLER  LAB3                                                                 04/30/2023 09:23:41 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+CLOCK. . . . . . .  C ADDR   003FH   A   
+CLOCK_1. . . . . .  C ADDR   0057H   A   
+DEC_1. . . . . . .  C ADDR   004BH   A   
+DELAY. . . . . . .  C ADDR   009EH   A   
+HIENTHI. . . . . .  C ADDR   006AH   A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PAUSE. . . . . . .  C ADDR   0093H   A   
+RESET. . . . . . .  C ADDR   0099H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

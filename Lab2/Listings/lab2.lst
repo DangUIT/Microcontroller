@@ -1,0 +1,108 @@
+A51 MACRO ASSEMBLER  LAB2                                                                 04/16/2023 23:24:01 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\lab2.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE lab2.asm SET(SMALL) DEBUG PRINT(.\Listings\lab2.lst) OBJECT(.\Objects\l
+                      ab2.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0H
+0000 7909              2             MOV R1,#9       ;GIO
+0002 7A3B              3             MOV R2,#59      ;PHUT
+0004 7B32              4             MOV R3,#50      ;GIAY
+0006                   5     MAIN:
+0006 110A              6             CALL SET_CLOCK
+0008 80FC              7             JMP MAIN
+000A                   8     SET_CLOCK:
+000A 111F              9             CALL HIENTHI
+000C 0B               10             INC R3
+000D BB3CFA           11             CJNE R3,#60,SET_CLOCK
+0010 0A               12             INC R2
+0011 7B00             13             MOV R3,#0
+0013 BA3CF4           14             CJNE R2,#60,SET_CLOCK
+0016 09               15             INC R1
+0017 7A00             16             MOV R2,#0
+0019 B918EE           17             CJNE R1,#24,SET_CLOCK
+001C 7900             18             MOV R1,#0
+001E 22               19             RET
+001F                  20     HIENTHI:
+001F 7C32             21             MOV R4,#50
+0021                  22     HIEN_THI:
+0021 E9               23             MOV A,R1
+0022 75F00A           24             MOV B,#10
+0025 84               25             DIV AB
+0026 75B001           26             MOV P3,#01H
+0029 F5A0             27             MOV P2,A
+002B D2A4             28             SETB P2.4
+002D 1167             29             CALL DELAY5MS_0
+002F 75B002           30             MOV P3,#02H
+0032 85F0A0           31             MOV P2,B
+0035 C2A4             32             CLR P2.4
+0037 1167             33             CALL DELAY5MS_0
+0039 EA               34             MOV A,R2
+003A 75F00A           35             MOV B,#10
+003D 84               36             DIV AB
+003E 75B004           37             MOV P3,#04H
+0041 F5A0             38             MOV P2,A
+0043 D2A4             39             SETB P2.4
+0045 1167             40             CALL DELAY5MS_0
+0047 75B008           41             MOV P3,#08H
+004A 85F0A0           42             MOV P2,B
+004D D2A4             43             SETB P2.4
+004F 1167             44             CALL DELAY5MS_0
+0051 DCCE             45             DJNZ R4,HIEN_THI
+0053 22               46             RET
+0054                  47     DELAY5MS:
+0054 758901           48             MOV TMOD,#01H
+0057 758CEC           49             MOV TH0,#HIGH(-5000)
+005A 758A78           50             MOV TL0,#LOW(-5000)
+005D D28C             51             SETB TR0
+005F 308DFD           52             JNB TF0,$
+0062 C28C             53             CLR TR0
+0064 C28D             54             CLR TF0
+0066 22               55             RET
+                      56     
+0067                  57     DELAY5MS_0:
+A51 MACRO ASSEMBLER  LAB2                                                                 04/16/2023 23:24:01 PAGE     2
+
+0067 7E30             58             MOV R6,#48
+0069                  59     DELAY5MS_1:
+0069 7D32             60             MOV R5,#50
+006B DDFE             61             DJNZ R5,$
+006D                  62     DELAY5MS_2:
+006D DEFA             63             DJNZ R6,DELAY5MS_1
+006F 22               64             RET
+                      65     
+                      66     END
+A51 MACRO ASSEMBLER  LAB2                                                                 04/16/2023 23:24:01 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+DELAY5MS . . . . .  C ADDR   0054H   A   
+DELAY5MS_0 . . . .  C ADDR   0067H   A   
+DELAY5MS_1 . . . .  C ADDR   0069H   A   
+DELAY5MS_2 . . . .  C ADDR   006DH   A   
+HIENTHI. . . . . .  C ADDR   001FH   A   
+HIEN_THI . . . . .  C ADDR   0021H   A   
+MAIN . . . . . . .  C ADDR   0006H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+SET_CLOCK. . . . .  C ADDR   000AH   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

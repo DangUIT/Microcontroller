@@ -1,0 +1,290 @@
+A51 MACRO ASSEMBLER  LAB4                                                                 05/29/2023 09:37:55 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\lab4.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE lab4.asm SET(SMALL) DEBUG PRINT(.\Listings\lab4.lst) OBJECT(.\Objects\l
+                      ab4.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0H
+0000 758921            2     MOV TMOD,#21H  
+0003 758DFD            3     MOV TH1,#0FDH   
+0006 759850            4     MOV SCON,#50H   
+0009 D28E              5     SETB TR1        
+                       6     
+000B                   7     INPUT:
+000B 7BFF              8     MOV R3,#-1
+000D 7C31              9     MOV R4,#"-1"
+*** _________________________________^
+*** WARNING #A52 IN 9 (lab4.asm, LINE 9): VALUE HAS BEEN TRUNCATED TO 8 BITS
+000F 7DFF             10     MOV R5,#-1
+                      11     
+0011                  12     MAIN:
+0011 7931             13     MOV R1,#"-1"
+*** _________________________________^
+*** WARNING #A52 IN 13 (lab4.asm, LINE 13): VALUE HAS BEEN TRUNCATED TO 8 BITS
+0013 7590FF           14     MOV P1,#0FFH
+0016 113A             15     CALL KEY_PRESS
+0018 B93102           16     CJNE R1,#"-1",LOOP
+*** __________________________________^
+*** WARNING #A52 IN 16 (lab4.asm, LINE 16): VALUE HAS BEEN TRUNCATED TO 8 BITS
+001B 80F4             17     JMP MAIN
+001D                  18     LOOP:
+001D BBFF04           19     CJNE R3,#-1,OP
+0020                  20     NUM_1:
+0020 EA               21     MOV A,R2
+0021 FB               22     MOV R3,A
+0022 800E             23     JMP DISPLAY
+0024                  24     OP:
+0024 BC3104           25     CJNE R4,#"-1",NUM_2
+*** __________________________________^
+*** WARNING #A52 IN 25 (lab4.asm, LINE 25): VALUE HAS BEEN TRUNCATED TO 8 BITS
+0027 E9               26     MOV A,R1
+0028 FC               27     MOV R4,A
+0029 8007             28     JMP DISPLAY
+002B                  29     NUM_2:
+002B BDFF04           30     CJNE R5,#-1,DISPLAY
+002E EA               31     MOV A,R2
+002F FD               32     MOV R5,A
+0030 8000             33     JMP DISPLAY
+0032                  34     DISPLAY:
+0032 8999             35     MOV SBUF,R1
+0034 312B             36     CALL HIENTHI
+0036 3131             37     CALL DELAY
+0038 80D7             38     JMP MAIN
+                      39     
+003A                  40     KEY_PRESS:
+003A 7590EF           41     MOV P1,#0EFH
+003D E590             42     MOV A,P1
+003F 54EF             43     ANL A,#0EFH
+0041 B4EF1F           44     CJNE A,#0EFH,COL1
+0044 7590DF           45     MOV P1,#0DFH
+0047 E590             46     MOV A,P1
+0049 54DF             47     ANL A,#0DFH
+004B B4DF40           48     CJNE A,#0DFH,COL2
+004E 7590BF           49     MOV P1,#0BFH
+A51 MACRO ASSEMBLER  LAB4                                                                 05/29/2023 09:37:55 PAGE     2
+
+0051 E590             50     MOV A,P1
+0053 54BF             51     ANL A,#0BFH
+0055 B4BF5B           52     CJNE A,#0BFH,COL3
+0058 75907F           53     MOV P1,#7FH
+005B E590             54     MOV A,P1
+005D 547F             55     ANL A,#7FH
+005F B47F7A           56     CJNE A,#7FH,COL4
+0062 22               57     RET
+                      58     
+0063                  59     COL1:
+0063 309009           60     JNB P1.0,SO_7
+0066 30910C           61     JNB P1.1,SO_4
+0069 30920F           62     JNB P1.2,SO_1
+006C 309312           63     JNB P1.3,CLEAR
+006F                  64     SO_7:
+006F 7937             65     MOV R1,#"7"
+0071 7A07             66     MOV R2,#7
+0073 80A8             67     JMP LOOP
+0075                  68     SO_4:
+0075 7934             69     MOV R1,#"4"
+0077 7A04             70     MOV R2,#4
+0079 80A2             71     JMP LOOP
+007B                  72     SO_1:
+007B 7931             73     MOV R1,#"1"
+007D 7A01             74     MOV R2,#1
+007F 809C             75     JMP LOOP
+0081                  76     CLEAR:
+0081 7599FE           77     MOV SBUF,#254
+0084 312B             78     CALL HIENTHI
+0086 759901           79     MOV SBUF,#1
+0089 312B             80     CALL HIENTHI
+008B 010B             81     JMP INPUT
+008D 22               82     RET
+                      83     
+008E                  84     COL2:
+008E 309009           85     JNB P1.0,SO_8
+0091 30910C           86     JNB P1.1,SO_5
+0094 30920F           87     JNB P1.2,SO_2
+0097 309312           88     JNB P1.3,SO_0
+009A                  89     SO_8:
+009A 7938             90     MOV R1,#"8"
+009C 7A08             91     MOV R2,#8
+009E 011D             92     JMP LOOP
+00A0                  93     SO_5:
+00A0 7935             94     MOV R1,#"5"
+00A2 7A05             95     MOV R2,#5
+00A4 011D             96     JMP LOOP
+00A6                  97     SO_2:
+00A6 7932             98     MOV R1,#"2"
+00A8 7A02             99     MOV R2,#2
+00AA 011D            100     JMP LOOP
+00AC                 101     SO_0:
+00AC 7930            102     MOV R1,#"0"
+00AE 7A00            103     MOV R2,#0
+00B0 011D            104     JMP LOOP
+00B2 22              105     RET
+                     106     
+00B3                 107     COL3:
+00B3 309009          108     JNB P1.0,SO_9
+00B6 30910C          109     JNB P1.1,SO_6
+00B9 30920F          110     JNB P1.2,SO_3
+00BC 309312          111     JNB P1.3,EQUAL
+00BF                 112     SO_9:
+00BF 7939            113     MOV R1,#"9"
+00C1 7A09            114     MOV R2,#9
+00C3 011D            115     JMP LOOP
+A51 MACRO ASSEMBLER  LAB4                                                                 05/29/2023 09:37:55 PAGE     3
+
+00C5                 116     SO_6:
+00C5 7936            117     MOV R1,#"6"
+00C7 7A06            118     MOV R2,#6
+00C9 011D            119     JMP LOOP
+00CB                 120     SO_3:
+00CB 7933            121     MOV R1,#"3"
+00CD 7A03            122     MOV R2,#3
+00CF 011D            123     JMP LOOP
+00D1                 124     EQUAL:
+00D1 793D            125     MOV R1,#"="
+00D3 8999            126     MOV SBUF,R1
+00D5 312B            127     CALL HIENTHI
+00D7 3131            128     CALL DELAY
+00D9 11F9            129     CALL OUT
+00DB 22              130     RET
+                     131     
+00DC                 132     COL4:
+00DC 309009          133     JNB P1.0,CHIA
+00DF 30910A          134     JNB P1.1,NHAN
+00E2 30920B          135     JNB P1.2,TRU
+00E5 30930C          136     JNB P1.3,CONG
+00E8                 137     CHIA:
+00E8 792F            138     MOV R1,#"/"
+00EA 011D            139     JMP LOOP
+00EC                 140     NHAN:
+00EC 7978            141     MOV R1,#"x"
+00EE 011D            142     JMP LOOP
+00F0                 143     TRU:
+00F0 792D            144     MOV R1,#"-"
+00F2 011D            145     JMP LOOP
+00F4                 146     CONG:
+00F4 792B            147     MOV R1,#"+"
+00F6 011D            148     JMP LOOP
+00F8 22              149     RET
+                     150     
+00F9                 151     OUT:
+00F9 EB              152     MOV A,R3
+00FA BC2B03          153     CJNE R4,#"+",TRU_1
+00FD                 154     CONG_1:
+00FD 2D              155     ADD A,R5
+00FE 8014            156     JMP DIS
+0100                 157     TRU_1:
+0100 BC2D04          158     CJNE R4,#"-",NHAN_1
+0103 C3              159     CLR C
+0104 9D              160     SUBB A,R5
+0105 800D            161     JMP DIS
+0107                 162     NHAN_1:
+0107 BC7805          163     CJNE R4,#"x",CHIA_1
+010A 8DF0            164     MOV B,R5
+010C A4              165     MUL AB
+010D 8005            166     JMP DIS
+010F                 167     CHIA_1:
+010F 8DF0            168     MOV B,R5
+0111 84              169     DIV AB
+0112 8000            170     JMP DIS
+0114                 171     DIS:
+0114 75F00A          172     MOV B,#10
+0117 84              173     DIV AB
+0118 2430            174     ADD A,#30H
+011A FE              175     MOV R6,A
+011B E5F0            176     MOV A,B
+011D 2430            177     ADD A,#30H
+011F FF              178     MOV R7,A
+0120 8E99            179     MOV SBUF,R6
+0122 312B            180     CALL HIENTHI
+0124 8F99            181     MOV SBUF,R7
+A51 MACRO ASSEMBLER  LAB4                                                                 05/29/2023 09:37:55 PAGE     4
+
+0126 312B            182     CALL HIENTHI
+0128 0111            183     JMP MAIN
+012A 22              184     RET
+                     185     
+012B                 186     HIENTHI:
+012B 3099FD          187     JNB TI,$                
+012E C299            188     CLR TI                  
+0130 22              189     RET
+                     190     
+0131                 191     DELAY:
+0131 7905            192     MOV R1,#5
+0133                 193     DELAY1:
+0133 758C3C          194     MOV TH0,#HIGH(-50000)
+0136 758AB0          195     MOV TL0,#LOW(-50000)
+0139 D28C            196     SETB TR0
+013B 308DFD          197     JNB TF0,$
+013E C28D            198     CLR TF0
+0140 C28C            199     CLR TR0
+0142 D9EF            200     DJNZ R1,DELAY1
+0144 22              201     RET
+                     202     
+                     203     END
+A51 MACRO ASSEMBLER  LAB4                                                                 05/29/2023 09:37:55 PAGE     5
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+CHIA . . . . . . .  C ADDR   00E8H   A   
+CHIA_1 . . . . . .  C ADDR   010FH   A   
+CLEAR. . . . . . .  C ADDR   0081H   A   
+COL1 . . . . . . .  C ADDR   0063H   A   
+COL2 . . . . . . .  C ADDR   008EH   A   
+COL3 . . . . . . .  C ADDR   00B3H   A   
+COL4 . . . . . . .  C ADDR   00DCH   A   
+CONG . . . . . . .  C ADDR   00F4H   A   
+CONG_1 . . . . . .  C ADDR   00FDH   A   
+DELAY. . . . . . .  C ADDR   0131H   A   
+DELAY1 . . . . . .  C ADDR   0133H   A   
+DIS. . . . . . . .  C ADDR   0114H   A   
+DISPLAY. . . . . .  C ADDR   0032H   A   
+EQUAL. . . . . . .  C ADDR   00D1H   A   
+HIENTHI. . . . . .  C ADDR   012BH   A   
+INPUT. . . . . . .  C ADDR   000BH   A   
+KEY_PRESS. . . . .  C ADDR   003AH   A   
+LOOP . . . . . . .  C ADDR   001DH   A   
+MAIN . . . . . . .  C ADDR   0011H   A   
+NHAN . . . . . . .  C ADDR   00ECH   A   
+NHAN_1 . . . . . .  C ADDR   0107H   A   
+NUM_1. . . . . . .  C ADDR   0020H   A   
+NUM_2. . . . . . .  C ADDR   002BH   A   
+OP . . . . . . . .  C ADDR   0024H   A   
+OUT. . . . . . . .  C ADDR   00F9H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SO_0 . . . . . . .  C ADDR   00ACH   A   
+SO_1 . . . . . . .  C ADDR   007BH   A   
+SO_2 . . . . . . .  C ADDR   00A6H   A   
+SO_3 . . . . . . .  C ADDR   00CBH   A   
+SO_4 . . . . . . .  C ADDR   0075H   A   
+SO_5 . . . . . . .  C ADDR   00A0H   A   
+SO_6 . . . . . . .  C ADDR   00C5H   A   
+SO_7 . . . . . . .  C ADDR   006FH   A   
+SO_8 . . . . . . .  C ADDR   009AH   A   
+SO_9 . . . . . . .  C ADDR   00BFH   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+TRU. . . . . . . .  C ADDR   00F0H   A   
+TRU_1. . . . . . .  C ADDR   0100H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  4 WARNING(S), 0 ERROR(S)
