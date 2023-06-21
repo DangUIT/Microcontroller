@@ -1,0 +1,258 @@
+C51 COMPILER V9.60.7.0   SC                                                                04/27/2023 17:57:07 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SC
+OBJECT MODULE PLACED IN .\Objects\sc.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE sc.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\sc.lst
+                    -) TABS(2) OBJECT(.\Objects\sc.obj)
+
+line level    source
+
+   1          #include <REGX51.H>
+   2          unsigned char SO[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+   3          sbit RED1 = P2 ^ 0;
+   4          sbit YELLOW1 = P2 ^ 1;
+   5          sbit GREEN1 = P2 ^ 2;
+   6          sbit RED2 = P2 ^ 5;
+   7          sbit YELLOW2 = P2 ^ 4;
+   8          sbit GREEN2 = P2 ^ 3;
+   9          sbit COL1 = P1 ^ 0;
+  10          sbit COL2 = P1 ^ 1;
+  11          sbit COL3 = P1 ^ 2;
+  12          sbit ROW1 = P1 ^ 3;
+  13          sbit ROW2 = P1 ^ 4;
+  14          sbit ROW3 = P1 ^ 5;
+  15          sbit ROW4 = P1 ^ 6;
+  16          int index = 0;
+  17          int count_red, count_green, count_yellow;
+  18          int count_red1, count_green1, count_yellow1;
+  19          int count_red2, count_green2, count_yellow2;
+  20          int i;
+  21          unsigned char key[9] = {-1, -1, -1, -1, -1, -1,-1,-1};//Chua gia tri nhap vao den giao thong
+  22          //////////////////////////////////////////////////////
+  23          void delay(int time)
+  24          {
+  25   1          while (time--);
+  26   1      }
+  27          void hienthi(int number, int number2)
+  28          {
+  29   1          for (i = 0; i < 30; i++)
+  30   1          {
+  31   2              P3_4 = 1;
+  32   2              P0 = SO[number / 10];
+  33   2              delay(1000);
+  34   2              P3_4 = 0;
+  35   2              P3_5 = 1;
+  36   2              P0 = SO[number % 10];
+  37   2              delay(1000);
+  38   2              P3_5 = 0;
+  39   2              P3_6 = 1;
+  40   2              P0 = SO[number2 / 10];
+  41   2              delay(1000);
+  42   2              P3_6 = 0;
+  43   2              P3_7 = 1;
+  44   2              P0 = SO[number2 % 10];
+  45   2              delay(1000);
+  46   2              P3_7 = 0;
+  47   2          }
+  48   1      }
+  49          void start()
+  50          {
+  51   1          count_red1 = count_red;
+  52   1          count_green1 = count_green;
+  53   1          count_red2 = count_green + count_yellow + 1;
+  54   1          count_green2 = count_red - count_yellow - 1;
+C51 COMPILER V9.60.7.0   SC                                                                04/27/2023 17:57:07 PAGE 2   
+
+  55   1          count_yellow1 = count_yellow2 = count_yellow;
+  56   1          for (count_red2; count_red2 >= 0; count_red2--)
+  57   1          {
+  58   2              if (count_green1 >= 0)
+  59   2              {
+  60   3                  RED1 = 0;
+  61   3                  YELLOW1 = 0;
+  62   3                  GREEN1 = 1;
+  63   3                  RED2 = 1;
+  64   3                  YELLOW2 = 0;
+  65   3                  GREEN2 = 0;
+  66   3                  hienthi(count_green1, count_red2);
+  67   3                  count_green1--;
+  68   3              }
+  69   2              else
+  70   2              {
+  71   3                  
+  72   3                  RED1 = 0;
+  73   3                  YELLOW1 = 1;
+  74   3                  GREEN1 = 0;
+  75   3                  RED2 = 1;
+  76   3                  YELLOW2 = 0;
+  77   3                  GREEN2 = 0;
+  78   3                  hienthi(count_yellow1, count_red2); 
+  79   3                  count_yellow1--;
+  80   3               }
+  81   2          }
+  82   1          for (count_red1; count_red1 >= 0; count_red1--)
+  83   1          {
+  84   2              if (count_green2 >= 0)
+  85   2              {
+  86   3                  RED1 = 1;
+  87   3                  YELLOW1 = 0;
+  88   3                  GREEN1 = 0;
+  89   3                  RED2 = 0;
+  90   3                  YELLOW2 = 0;
+  91   3                  GREEN2 = 1;
+  92   3                  hienthi(count_red1, count_green2);
+  93   3                  count_green2--;
+  94   3              }
+  95   2              else
+  96   2              {
+  97   3                  RED1 = 1;
+  98   3                  YELLOW1 = 0;
+  99   3                  GREEN1 = 0;
+ 100   3                  RED2 = 0;
+ 101   3                  YELLOW2 = 1;
+ 102   3                  GREEN2 = 0;
+ 103   3                  hienthi(count_red1, count_yellow2);
+ 104   3                  count_yellow2--;
+ 105   3              }
+ 106   2          }
+ 107   1      }
+ 108          void keyPress()
+ 109          {
+ 110   1          COL1 = 0;
+ 111   1          if (ROW1 == 0)
+ 112   1          {
+ 113   2              key[index++] = 1;
+ 114   2              delay(50000);
+ 115   2          }
+ 116   1          if (ROW2 == 0)
+C51 COMPILER V9.60.7.0   SC                                                                04/27/2023 17:57:07 PAGE 3   
+
+ 117   1          {
+ 118   2              key[index++] = 4;
+ 119   2              delay(50000);
+ 120   2          }
+ 121   1          if (ROW3 == 0)
+ 122   1          {
+ 123   2              key[index++] = 7;
+ 124   2              delay(50000);
+ 125   2          }
+ 126   1          if (ROW4 == 0)
+ 127   1          {
+ 128   2              key[index++] = -2;
+ 129   2              delay(50000);
+ 130   2          }
+ 131   1          COL1 = 1;
+ 132   1          COL2 = 0;
+ 133   1          if (ROW1 == 0)
+ 134   1          {
+ 135   2              key[index++] = 2;
+ 136   2              delay(50000);
+ 137   2          }
+ 138   1          if (ROW2 == 0)
+ 139   1          {
+ 140   2              key[index++] = 5;
+ 141   2              delay(50000);
+ 142   2          }
+ 143   1          if (ROW3 == 0)
+ 144   1          {
+ 145   2              key[index++] = 8;
+ 146   2              delay(50000);
+ 147   2          }
+ 148   1          if (ROW4 == 0)
+ 149   1          {
+ 150   2              key[index++] = 0;
+ 151   2              delay(50000);
+ 152   2          }
+ 153   1          COL2 = 1;
+ 154   1          COL3 = 0;
+ 155   1          if (ROW1 == 0)
+ 156   1          {
+ 157   2              key[index++] = 3;
+ 158   2              delay(50000);
+ 159   2          }
+ 160   1          if (ROW2 == 0)
+ 161   1          {
+ 162   2              key[index++] = 6;
+ 163   2              delay(50000);
+ 164   2          }
+ 165   1          if (ROW3 == 0)
+ 166   1          {
+ 167   2              key[index++] = 9;
+ 168   2              delay(50000);
+ 169   2          }
+ 170   1          if (ROW4 == 0)
+ 171   1              delay(50000);
+ 172   1          COL3 = 1;
+ 173   1      }
+ 174          void initTime()
+ 175          {
+ 176   1          index = 0;
+ 177   1          while (index < 9)
+ 178   1          {
+C51 COMPILER V9.60.7.0   SC                                                                04/27/2023 17:57:07 PAGE 4   
+
+ 179   2              keyPress();
+ 180   2              if(key[0]!=-2)
+ 181   2              {
+ 182   3                index = 0;
+ 183   3                continue;
+ 184   3              }
+ 185   2              if (index < 3 && key[0] == -2)
+ 186   2              {
+ 187   3                  GREEN1 = 1;
+ 188   3                  RED1 = 0;
+ 189   3                  YELLOW1 = 0;
+ 190   3              }
+ 191   2              if (index >= 3 && index < 6 && key[3] == -2)
+ 192   2              {
+ 193   3                  GREEN1 = 0;
+ 194   3                  RED1 = 0;
+ 195   3                  YELLOW1 = 1;
+ 196   3              }
+ 197   2              if (index >= 6 && index < 9 && key[6] == -2)
+ 198   2              {
+ 199   3                  GREEN1 = 0;
+ 200   3                  RED1 = 1;
+ 201   3                  YELLOW1 = 0;
+ 202   3              }
+ 203   2          }
+ 204   1      }
+ 205          ////////////////////////////////////////////////////////////////
+ 206          ////// Chuong trinh chinh///////////////////////////////////////
+ 207          void main()
+ 208          {
+ 209   1          P2 = 0x00;
+ 210   1          EA = 1;
+ 211   1          EX0 = 1; // Ngat ngoai 0
+ 212   1          initTime();
+ 213   1          count_green = key[1] * 10 + key[2];
+ 214   1          count_yellow = key[4] * 10 + key[5];
+ 215   1          count_red = key[7] * 10 + key[8];
+ 216   1          while (1)
+ 217   1              start();
+ 218   1      }
+ 219          ////////////////////////////////////////////////////////////////
+ 220          //////////////Ngat ngoai 0 /////////////////////////////////////
+ 221          void ngat() interrupt 0
+ 222          {
+ 223   1          count_red = 10;
+ 224   1          count_green = 20;
+ 225   1          count_yellow = 3;
+ 226   1          while (1)
+ 227   1              start();
+ 228   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    893    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     41       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
